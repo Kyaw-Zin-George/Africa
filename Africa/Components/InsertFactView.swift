@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct InsertFactView: View {
+    let animal: Animal
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GroupBox{
+            TabView{
+                ForEach(animal.fact, id: \.self) { item in
+                    Text(item)
+                }
+            }//Tabs
+            .tabViewStyle(PageTabViewStyle())
+            .frame(minHeight: 148,idealHeight: 168, maxHeight: 180)
+        }
     }
 }
 
 #Preview {
-    InsertFactView()
+    let animals : [Animal] = Bundle.main.decode("animals.json")
+    InsertFactView(animal: animals[0])
 }
