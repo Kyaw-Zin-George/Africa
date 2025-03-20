@@ -17,22 +17,65 @@ struct MapView: View {
     }()
     let locations: [NationalParkLocation] = Bundle.main.decode("locations.json")
     var body: some View {
-       //MARK: BASIC MAP
+        //MARK: BASIC MAP
         Map(coordinateRegion: $region, annotationItems: locations) { item in
             //1. Pin: OLD STYLE
-           // MapPin(coordinate: item.location, tint: .accent)
+            // MapPin(coordinate: item.location, tint: .accent)
             
             //2. MARKER NEW STYLE
-           // MapMarker(coordinate: item.location, tint: .accentColor)
+            // MapMarker(coordinate: item.location, tint: .accentColor)
             
             //3. CUSTOM PIN
+            //            MapAnnotation(coordinate: item.location) {
+            //                Image("logo")
+            //                    .resizable()
+            //                    .scaledToFit()
+            //                    .frame(width: 32,height: 32, alignment: .center)
+            //}
+            //4. Custom Advanced Annotation
             MapAnnotation(coordinate: item.location) {
-                Image("logo")
+                MapAnnotationView(location: item)
+            }
+            
+        }
+        .overlay (
+            HStack(spacing: 12) {
+                Image("compass")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 32,height: 32, alignment: .center)
+                    .frame(width: 48,height: 48, alignment: .center)
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack{
+                        Text("Latitude:")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.accent)
+                        Spacer()
+                        Text("\(region.center.latitude)")
+                            .font(.footnote)
+                            .foregroundStyle(.white)
+                    }
+                    Divider()
+                    HStack{
+                        Text("Longitude:")
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(.accent)
+                        Spacer()
+                        Text("\(region.center.longitude)")
+                            .font(.footnote)
+                            .foregroundStyle(.white)
+                    }
+                }
             }
-        }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .background(
+                Color.black
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .opacity(0.6)
+            )
+            .padding()
+            ,alignment: .top
+        )
     }
 }
 
